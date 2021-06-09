@@ -1,0 +1,135 @@
+{
+    "name": "OCI-DNS",
+    "type": "executer",
+    "execProgram": "node",
+    "main": "app.js",
+    "exposeRoute": false,
+    "imgUrl": "logo.png",
+    "version": "1.0.0",
+    "description": "Integration with Oracle Cloud DNS",
+    "settings": [
+        {
+            "name":"compartment",
+            "viewName":"Default Compatmrent ID",
+            "type":"string"
+        },
+        {
+            "name":"userId",
+            "viewName":"User Id",
+            "type":"string"
+        },
+        {
+            "name":"privateKey",
+            "viewName":"Private key",
+            "type":"vault"
+        },
+        {
+            "name":"tenancyId",
+            "viewName":"Tenancy Id",
+            "type":"string"
+        },
+        {
+            "name":"fingerprint",
+            "viewName":"Fingerprint",
+            "type":"vault"
+        },
+        {
+            "name":"region",
+            "viewName":"Region",
+            "type":"string"
+        }
+    ],
+    "methods":[
+        {
+            "name":"createZone",
+            "viewName":"Create Zone",
+            "params": [
+                {
+                    "name": "compartment",
+                    "viewName": "Compartment",
+                    "type": "autocomplete",
+                    "autocompleteType":"function",
+                    "functionName":"listCompartments"
+                },
+                {
+                    "name": "name",
+                    "viewName": "Domain Name",
+                    "type": "string"
+                },
+                {
+                    "name":"scope",
+                    "viewName": "Scope",
+                    "type": "options",
+                    "options": [
+                        {
+                            "id": "PUBLIC",
+                            "name": "PUBLIC"
+                        },
+                        {
+                            "id": "PRIVATE",
+                            "name": "PRIVATE"
+                        }
+                    ]
+                },
+                {
+                    "name":"zoneType",
+                    "viewName": "Zone Type",
+                    "type": "options",
+                    "options": [
+                        {
+                            "id": "PRIMARY",
+                            "name": "PRIMARY"
+                        },
+                        {
+                            "id": "SECONDARY",
+                            "name": "SECONDARY"
+                        }
+                    ]
+                },
+                {
+                    "name": "externalMasters",
+                    "viewName": "External Masters",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "name":"updateZoneRecords",
+            "viewName": "update Zone Records",
+            "params": [
+                {
+                    "name": "compartment",
+                    "viewName": "Compartment",
+                    "type": "autocomplete",
+                    "autocompleteType":"function",
+                    "functionName":"listCompartments"
+                },
+                {
+                    "name": "zone",
+                    "viewName": "Zone Name or ID",
+                    "type": "string"
+                },
+                {
+                    "name":"scope",
+                    "viewName": "Scope",
+                    "type": "options",
+                    "options": [
+                        {
+                            "id": "PUBLIC",
+                            "name": "PUBLIC"
+                        },
+                        {
+                            "id": "PRIVATE",
+                            "name": "PRIVATE"
+                        }
+                    ]
+                },
+                {
+                    "name":"records",
+                    "viewName": "Record Items(Objects Array)",
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}

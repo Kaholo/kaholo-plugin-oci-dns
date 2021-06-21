@@ -9,11 +9,6 @@
     "description": "Integration with Oracle Cloud DNS",
     "settings": [
         {
-            "name":"compartment",
-            "viewName":"Default Compatmrent ID",
-            "type":"string"
-        },
-        {
             "name":"userId",
             "viewName":"User Id",
             "type":"string"
@@ -72,6 +67,13 @@
                     ]
                 },
                 {
+                    "name": "vcn",
+                    "viewName": "Private View of VCN",
+                    "type": "autocomplete",
+                    "autocompleteType":"function",
+                    "functionName":"listVCN"
+                },
+                {
                     "name":"zoneType",
                     "viewName": "Zone Type",
                     "type": "options",
@@ -95,7 +97,7 @@
         },
         {
             "name":"updateZoneRecords",
-            "viewName": "update Zone Records",
+            "viewName": "Update Zone Records",
             "params": [
                 {
                     "name": "compartment",

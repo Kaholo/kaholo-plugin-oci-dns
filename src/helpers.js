@@ -1,5 +1,6 @@
 const fs = require("fs");
 const common = require("oci-common");
+const dns = require("oci-dns");
 
 function createConfigFile(settings){
     const configPath = `${__dirname}/.oci`;
@@ -33,6 +34,9 @@ function getProvider(settings){
     );
 }
 
+/*
+ * @return {dns.DnsClient}
+*/
 function getClient(settings){
     return new dns.DnsClient({
       authenticationDetailsProvider: getProvider(settings)

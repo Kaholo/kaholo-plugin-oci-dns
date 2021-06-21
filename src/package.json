@@ -9,8 +9,9 @@
   "author": "Kaholo Team(Amit Alon)",
   "license": "ISC",
   "dependencies": {
-    "oci-identity": "^1.20.2",
-    "oci-common": "^1.20.2",
-    "oci-dns": "^1.20.2"
+    "oci-identity": "^1.21.0",
+    "oci-core": "^1.21.0",
+    "oci-common": "^1.21.0",
+    "oci-dns": "^1.21.0"
   }
 }

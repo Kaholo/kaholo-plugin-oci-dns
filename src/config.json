@@ -67,6 +67,13 @@
                     ]
                 },
                 {
+                    "name": "vcn",
+                    "viewName": "Private View of VCN",
+                    "type": "autocomplete",
+                    "autocompleteType":"function",
+                    "functionName":"listVCN"
+                },
+                {
                     "name":"zoneType",
                     "viewName": "Zone Type",
                     "type": "options",

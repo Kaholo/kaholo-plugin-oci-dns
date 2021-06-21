@@ -1,33 +1,65 @@
+const core = require("oci-core")
 const identity = require("oci-identity");
 const { getProvider } = require('./helpers');
+const parsers = require("./parsers")
 
-function mapSettings(pluginSettings){
-  const settings = {};
-  pluginSettings.foreach(setting => {
-    settings[setting.id] = setting.value;
+// auto complete helper methods
+
+function mapAutoParams(autoParams){
+  const params = {};
+  autoParams.forEach(param => {
+    params[param.name] = parsers.autocomplete(param.value);
   });
-  return settings;
+  return params;
 }
 
+function handleResult(result, query){
+  let items = result.items;
+  if (items.length === 0) return [];
+  items = items.map(item => ({
+    id: item.id,
+    value:  item.displayName ? item.displayName : 
+            item.name ? item.name : item.id
+  }));
+
+  if (!query) return items;
+  query = query.split(" ");
+  return items.filter(item => query.every(qWord => 
+    item.value.toLowerCase().includes(qWord.toLowerCase())
+  ));
+}
+ 
+// main auto complete methods
+
 async function listCompartments(query, pluginSettings) {
-  const settings = mapSettings(pluginSettings);
+  const settings = mapAutoParams(pluginSettings);
   const tenancyId = settings.tenancyId;
   const provider = getProvider(settings);
   const identityClient = await new identity.IdentityClient({
     authenticationDetailsProvider: provider
   });
-  const request = {
-    compartmentId: tenancyId
-  };
-  const response = await identityClient.listCompartments(request);
-  let options = response.items.map((item) => ({ id: item.id, value: item.name}));
-  if (!query) {
-      return options;
-  }
-  const filteredList = options.filter(val => val.value.includes(query))
-  return filteredList;
+  const request = { compartmentId: tenancyId };
+  const result = await identityClient.listCompartments(request);
+  return handleResult(result, query);
+}
+
+async function listVCN(query, pluginSettings, pluginActionParams) {
+    /**
+     * This method will return all VCN
+     */
+    const settings = mapAutoParams(pluginSettings), params = mapAutoParams(pluginActionParams);
+    const compartmentId = params.compartment || settings.tenancyId;
+    const provider = getProvider(settings);
+    const virtualNetworkClient = new core.VirtualNetworkClient({
+      authenticationDetailsProvider: provider
+    });
+ 
+    const request = {compartmentId};
+    const result = await virtualNetworkClient.listVcns(request);
+    return handleResult(result, query, "id", "displayName");
 }
 
 module.exports = {
-    listCompartments
+  listCompartments,
+  listVCN
 }

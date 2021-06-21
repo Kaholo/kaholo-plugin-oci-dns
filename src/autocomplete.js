@@ -40,7 +40,9 @@ async function listCompartments(query, pluginSettings) {
   });
   const request = { compartmentId: tenancyId };
   const result = await identityClient.listCompartments(request);
-  return handleResult(result, query);
+  const compartments = handleResult(result, query);
+  compartments.push({id: tenancyId, value: "Tenancy"});
+  return compartments;
 }
 
 async function listVCN(query, pluginSettings, pluginActionParams) {

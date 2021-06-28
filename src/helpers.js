@@ -1,17 +1,20 @@
 const common = require("oci-common");
 const dns = require("oci-dns");
 
-function getProvider(settings){
+/***
+ * @returns {common.SimpleAuthenticationDetailsProvider} OCI Auth Details Provider
+ ***/
+ function getProvider(settings){
     return new common.SimpleAuthenticationDetailsProvider(
         settings.tenancyId,     settings.userId,
         settings.fingerprint,   settings.privateKey,
-        null,                   settings.region
+        null,                   common.Region.fromRegionId(settings.region)
     );
 }
 
-/*
- * @return {dns.DnsClient}
-*/
+/*** 
+ * @returns {dns.DnsClient}
+***/
 function getClient(settings){
     return new dns.DnsClient({
       authenticationDetailsProvider: getProvider(settings)

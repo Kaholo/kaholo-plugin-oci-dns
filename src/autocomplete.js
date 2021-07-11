@@ -13,12 +13,13 @@ function mapAutoParams(autoParams){
   return params;
 }
 
-function handleResult(result, query){
+function handleResult(result, query, specialKey){
   let items = result.items;
   if (items.length === 0) return [];
   items = items.map(item => ({
-    id: item.id,
-    value:  item.displayName ? item.displayName : 
+    id: specialKey ? item[specialKey] : item.id,
+    value:  specialKey ? item[specialKey] : 
+            item.displayName ? item.displayName : 
             item.name ? item.name : item.id
   }));
 
@@ -38,8 +39,11 @@ async function listCompartments(query, pluginSettings) {
   const identityClient = await new identity.IdentityClient({
     authenticationDetailsProvider: provider
   });
-  const request = { compartmentId: tenancyId };
-  const result = await identityClient.listCompartments(request);
+  const result = await identityClient.listCompartments({
+    compartmentId: tenancyId,
+    compartmentIdInSubtree: true,
+    accessLevel: "ACCESSIBLE"
+  });
   const compartments = handleResult(result, query);
   compartments.push({id: tenancyId, value: "Tenancy"});
   return compartments;
